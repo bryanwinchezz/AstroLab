@@ -259,16 +259,18 @@
             </div>
 
             <div class="flex items-center gap-2 md:gap-3">
+                <!-- Botão Oráculo -->
                 <button onclick="app.setStep('tarot')"
-                    class="flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors border border-indigo-500/30 text-sm font-bold text-indigo-200">
+                    class="flex items-center gap-2 px-3 md:px-4 py-2 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors border border-indigo-500/30 text-sm font-bold text-indigo-200">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                     <span class="hidden md:inline">Oráculo IA</span>
                 </button>
 
+                <!-- Botão Mapas (Fixed for Mobile: Removed 'hidden', added 'flex' and hid text on mobile) -->
                 <button onclick="app.toggleSavedModal(true)"
-                    class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-sm font-bold text-purple-200">
+                    class="flex items-center gap-2 px-3 md:px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-sm font-bold text-purple-200">
                     <i data-lucide="book-open" class="w-4 h-4"></i>
-                    <span>Mapas</span>
+                    <span class="hidden md:inline">Mapas</span>
                 </button>
 
                 <!-- Botão de Configurações -->
@@ -321,7 +323,7 @@
                     <div class="relative group">
                         <input required type="text" id="inp-name"
                             class="w-full bg-black/20 border border-white/10 rounded-2xl px-5 py-4 pl-12 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 transition-all text-white placeholder-white/20"
-                            placeholder="Ex: Kauan Bryan">
+                            placeholder="Ex: Tony Stark">
                         <i data-lucide="user"
                             class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 group-focus-within:text-purple-300 transition-colors"></i>
                     </div>
@@ -354,7 +356,7 @@
                     <div class="relative group">
                         <input required type="text" id="inp-place"
                             class="w-full bg-black/20 border border-white/10 rounded-2xl px-5 py-4 pl-12 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 transition-all text-white placeholder-white/20"
-                            placeholder="Ex: Santos, SP">
+                            placeholder="Ex: Nova York, NY">
                         <i data-lucide="map-pin"
                             class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400"></i>
                     </div>
