@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroLab - Universo Interior</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Nunito (Redonda/Confortável) & Cinzel (Mística) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Cinzel:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-mystic {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Animações */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+
+        /* Vidro e Efeitos */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: pulse-slow 3s infinite;
+        }
+
+        /* Estilo Aprimorado para Markdown da IA */
+        .prose {
+            font-size: 1rem;
+            line-height: 1.8;
+            /* Leitura mais arejada */
+        }
+
+        .prose p {
+            margin-bottom: 1.25em;
+            color: #e2e8f0;
+        }
+
+        /* Destaque Mágico para Negrito */
+        .prose strong {
+            color: #d8b4fe;
+            /* Roxo Lilás Brilhante */
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+            /* Glow sutil */
+        }
+
+        .prose em {
+            color: #a5b4fc;
+            /* Indigo claro para itálico */
+        }
+
+        .prose h1,
+        .prose h2,
+        .prose h3 {
+            font-family: 'Cinzel', serif;
+            color: #f0abfc;
+            /* Rosa místico */
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            font-weight: 700;
+        }
+
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+            margin-bottom: 1.25em;
+        }
+
+        .prose li {
+            margin-bottom: 0.5em;
+            color: #cbd5e1;
+        }
+
+        .prose li strong {
+            color: #e879f9;
+            /* Variação de cor para listas */
+        }
+
+        /* Tarot Card Styles */
+        .tarot-card-scene {
+            perspective: 1000px;
+            width: 140px;
+            height: 220px;
+        }
+
+        .tarot-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .tarot-card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .tarot-card-front,
+        .tarot-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        .tarot-card-front {
+            background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%);
+            border: 2px solid #a78bfa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotateY(180deg);
+        }
+
+        .tarot-card-back {
+            background: linear-gradient(45deg, #0f172a 25%, #1e293b 25%, #1e293b 50%, #0f172a 50%, #0f172a 75%, #1e293b 75%, #1e293b 100%);
+            background-size: 20px 20px;
+            border: 2px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tarot-card-back::after {
+            content: '✦';
+            font-size: 2.5rem;
+            color: #475569;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-purple-500 selection:text-white font-sans text-base">
+
+    <!-- Background Animado -->
+    <div id="star-bg" class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-purple-900/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-indigo-900/10 rounded-full blur-[120px]">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="app.setStep('intro')">
+                <div
+                    class="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform">
+                    <i data-lucide="star" class="w-5 h-5 text-white fill-white"></i>
+                </div>
+                <span
+                    class="text-2xl font-mystic font-bold tracking-tight bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                    AstroLab
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2 md:gap-3">
+                <button onclick="app.setStep('tarot')"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors border border-indigo-500/30 text-sm font-bold text-indigo-200">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Oráculo IA</span>
+                </button>
+
+                <button onclick="app.toggleSavedModal(true)"
+                    class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-sm font-bold text-purple-200">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span>Mapas</span>
+                </button>
+
+                <!-- Botão de Configurações -->
+                <button onclick="app.toggleSettingsModal(true)"
+                    class="p-2.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-slate-300 hover:text-white group relative">
+                    <i data-lucide="settings"
+                        class="w-5 h-5 group-hover:rotate-45 transition-transform duration-500"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col relative z-10 pt-28 px-4 pb-12 w-full max-w-6xl mx-auto">
+
+        <!-- INTRO STEP -->
+        <div id="step-intro" class="text-center max-w-3xl animate-fade-in-up mx-auto my-auto">
+            <div
+                class="mb-8 inline-flex items-center justify-center p-6 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 shadow-[0_0_50px_-10px_rgba(99,102,241,0.3)] animate-float">
+                <i data-lucide="compass" class="w-16 h-16 text-indigo-300"></i>
+            </div>
+            <h1 id="intro-title"
+                class="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white drop-shadow-2xl font-mystic leading-tight">
+                AstroLab</h1>
+            <p id="intro-subtitle"
+                class="text-xl md:text-2xl text-purple-100/80 mb-12 font-medium leading-relaxed max-w-xl mx-auto">
+                Descubra a magia do seu universo interior com precisão e sabedoria.</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button onclick="app.setStep('form')"
+                    class="px-8 py-4 bg-white text-purple-900 rounded-2xl font-extrabold text-lg hover:bg-purple-50 transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(255,255,255,0.2)] transform hover:-translate-y-1">
+                    <span id="intro-btn">Criar meu Mapa</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                <button onclick="app.setStep('tarot')"
+                    class="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-3 backdrop-blur-sm">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    <span>Conversar com Astra</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- FORM STEP -->
+        <div id="step-form"
+            class="hidden w-full max-w-lg glass-panel p-10 rounded-[2rem] shadow-2xl animate-fade-in mx-auto my-auto">
+            <h2 id="form-title" class="text-3xl font-bold mb-8 text-center text-white font-mystic">Dados Estelares</h2>
+            <form onsubmit="app.handleCalculate(event)" class="space-y-6">
+                <div class="space-y-2">
+                    <label id="lbl-name" class="text-sm font-bold text-purple-200 ml-1 uppercase tracking-wide">Nome
+                        Completo</label>
+                    <div class="relative group">
+                        <input required type="text" id="inp-name"
+                            class="w-full bg-black/20 border border-white/10 rounded-2xl px-5 py-4 pl-12 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 transition-all text-white placeholder-white/20"
+                            placeholder="Ex: Kauan Bryan">
+                        <i data-lucide="user"
+                            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 group-focus-within:text-purple-300 transition-colors"></i>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label id="lbl-date"
+                            class="text-sm font-bold text-purple-200 ml-1 uppercase tracking-wide">Nascimento</label>
+                        <div class="relative group">
+                            <input required type="date" id="inp-date"
+                                class="w-full bg-black/20 border border-white/10 rounded-2xl px-4 py-4 pl-10 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 text-white [color-scheme:dark]">
+                            <i data-lucide="calendar"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label id="lbl-time" class="text-sm font-bold text-purple-200 ml-1 uppercase tracking-wide">Hora
+                            <span class="text-xs text-white/40 font-normal normal-case">(Opcional)</span></label>
+                        <div class="relative group">
+                            <input type="time" id="inp-time"
+                                class="w-full bg-black/20 border border-white/10 rounded-2xl px-4 py-4 pl-10 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 text-white [color-scheme:dark]">
+                            <i data-lucide="clock"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label id="lbl-place"
+                        class="text-sm font-bold text-purple-200 ml-1 uppercase tracking-wide">Cidade</label>
+                    <div class="relative group">
+                        <input required type="text" id="inp-place"
+                            class="w-full bg-black/20 border border-white/10 rounded-2xl px-5 py-4 pl-12 text-lg focus:outline-none focus:border-purple-500 focus:bg-black/40 transition-all text-white placeholder-white/20"
+                            placeholder="Ex: Santos, SP">
+                        <i data-lucide="map-pin"
+                            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400"></i>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full py-5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl font-extrabold text-lg text-white shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 mt-6">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    <span id="btn-generate">Revelar Mapa</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- LOADING STEP -->
+        <div id="step-loading"
+            class="hidden flex-col items-center justify-center animate-fade-in py-20 min-h-[50vh] mx-auto my-auto">
+            <div class="relative w-32 h-32 mb-8">
+                <div class="absolute inset-0 border-4 border-purple-500/30 rounded-full animate-ping"></div>
+                <div class="absolute inset-0 border-4 border-t-purple-400 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="star" class="w-10 h-10 text-white animate-pulse fill-white"></i>
+                </div>
+            </div>
+            <p id="loading-text" class="text-2xl font-light text-purple-200 animate-pulse font-mystic">Sintonizando
+                frequências cósmicas...</p>
+        </div>
+
+        <!-- RESULT STEP -->
+        <div id="step-result" class="hidden w-full animate-fade-in-up pb-10">
+
+            <!-- Control Bar -->
+            <div class="flex flex-col md:flex-row items-center justify-between mb-10 gap-6 glass-panel p-6 rounded-3xl">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2 font-mystic flex items-center gap-2">
+                        <span id="res-greeting">Olá</span>, <span id="res-name"
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-white">Viajante</span>
+                    </h1>
+                    <p id="res-details" class="text-purple-200/70 flex items-center gap-4 text-sm font-medium">
+                        <!-- Filled by JS -->
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="app.handleSave()" id="btn-save"
+                        class="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all bg-white/5 hover:bg-white/10 text-white border border-white/10">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span id="btn-save-text">Salvar</span>
+                    </button>
+                    <button onclick="app.setStep('form')"
+                        class="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-sm font-bold text-slate-200 transition-colors border border-white/10">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span id="btn-back">Novo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Arcana Container -->
+            <div id="arcana-container" class="mb-10"></div>
+
+            <!-- Zodiac Grid -->
+            <div id="zodiac-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10"></div>
+
+            <!-- Details Section -->
+            <div id="details-section"
+                class="w-full glass-panel rounded-[2rem] overflow-hidden shadow-2xl mb-10 border border-purple-500/20">
+                <div class="p-8 border-b border-white/5 flex items-center gap-3 bg-white/5">
+                    <div class="p-2 bg-purple-500/20 rounded-xl">
+                        <i data-lucide="book-open" class="w-6 h-6 text-purple-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white font-mystic">
+                        <span id="details-title">Análise Profunda</span>: <span id="details-sign-name"
+                            class="text-purple-300"></span>
+                    </h3>
+                </div>
+                <div class="flex p-3 gap-3 overflow-x-auto bg-black/20" id="tabs-container">
+                    <!-- Tabs injected by JS -->
+                </div>
+                <div class="p-10 min-h-[200px]">
+                    <p id="details-content" class="text-lg text-slate-200 leading-8 font-light text-justify"></p>
+                </div>
+            </div>
+
+            <!-- AI Features Section (Gemini Integration) -->
+            <div class="w-full glass-panel rounded-3xl overflow-hidden shadow-2xl border border-indigo-500/30">
+                <div
+                    class="p-6 border-b border-white/5 bg-indigo-900/20 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-500 rounded-lg shadow-lg shadow-indigo-500/50">
+                            <i data-lucide="sparkles" class="w-6 h-6 text-white fill-white"></i>
+                        </div>
+                        <div>
+                            <h3 id="ai-title" class="text-xl font-bold text-white font-mystic">Oráculo de Inteligência
+                                Estelar</h3>
+                            <p id="ai-subtitle" class="text-sm text-indigo-300">Insights exclusivos gerados por IA para
+                                o seu mapa</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <button onclick="app.askAI('synergy')"
+                            class="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/20">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                            <span id="btn-ai-synergy">Sinergia Cósmica</span>
+                        </button>
+                        <button onclick="app.askAI('advice')"
+                            class="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            <span id="btn-ai-advice">Conselho do Oráculo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-output-container" class="hidden p-8 bg-black/20 min-h-[100px] transition-all">
+                    <!-- Loading State -->
+                    <div id="ai-loading" class="hidden space-y-4">
+                        <div class="h-4 bg-white/10 rounded w-3/4 ai-shimmer"></div>
+                        <div class="h-4 bg-white/10 rounded w-full ai-shimmer"></div>
+                        <div class="h-4 bg-white/10 rounded w-5/6 ai-shimmer"></div>
+                    </div>
+                    <!-- Content -->
+                    <div id="ai-content"
+                        class="prose prose-invert max-w-none text-slate-200 font-light leading-relaxed"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAROT / CHAT STEP -->
+        <div id="step-tarot"
+            class="hidden w-full max-w-5xl animate-fade-in-up pb-4 flex flex-col h-full flex-grow mx-auto">
+
+            <!-- Chat Header & Toggle -->
+            <div
+                class="glass-panel p-6 rounded-3xl mb-4 flex flex-col md:flex-row justify-between items-center gap-4 flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <div
+                            class="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 p-0.5 shadow-lg shadow-purple-500/30">
+                            <div
+                                class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
+                                <i data-lucide="bot" class="w-8 h-8 text-white"></i>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-slate-900 rounded-full">
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white font-mystic">Madame Astra</h2>
+                        <p class="text-sm text-purple-200/60 font-medium">Oráculo IA & Mentora Espiritual</p>
+                    </div>
+                </div>
+
+                <!-- Mode Switcher -->
+                <div class="flex items-center gap-3 bg-black/30 p-1.5 rounded-2xl border border-white/5">
+                    <button onclick="app.setChatMode('chat')" id="mode-chat-btn"
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-white">
+                        <i data-lucide="message-square" class="w-4 h-4"></i>
+                        Conversa
+                    </button>
+                    <button onclick="app.setChatMode('tarot')" id="mode-tarot-btn"
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-purple-600 text-white shadow-lg">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        Tarot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tarot Table (Visible only in Tarot Mode) -->
+            <div id="tarot-section" class="transition-all duration-500 overflow-hidden mb-4 flex-shrink-0">
+                <div id="tarot-table"
+                    class="min-h-[240px] w-full flex justify-center items-center gap-6 perspective-1000 overflow-x-auto p-2">
+                    <div
+                        class="text-white/20 border-2 border-dashed border-white/10 rounded-2xl w-[140px] h-[220px] flex flex-col gap-2 items-center justify-center">
+                        <i data-lucide="layers" class="w-8 h-8 opacity-50"></i>
+                        <span class="text-xs font-bold text-center px-4">As cartas surgirão aqui</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div
+                class="glass-panel rounded-3xl overflow-hidden shadow-2xl flex flex-col flex-1 border border-white/5 relative min-h-[400px]">
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+                    <!-- Intro Message -->
+                    <div class="flex items-start gap-4 animate-fade-in">
+                        <div
+                            class="w-10 h-10 rounded-full bg-purple-900/50 border border-purple-500/30 flex items-center justify-center flex-shrink-0 text-purple-200">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </div>
+                        <div
+                            class="bg-white/5 border border-white/5 rounded-2xl rounded-tl-none p-5 text-slate-200 max-w-[85%] leading-relaxed shadow-sm">
+                            <p class="font-medium text-white mb-1">Saudações.</p>
+                            <p>Eu sou Madame Astra. Escolha o modo <b>Tarot</b> para uma tiragem de cartas sobre uma
+                                questão específica, ou <b>Conversa</b> para um diálogo contínuo onde lembrarei de tudo o
+                                que falamos. Como posso guiar sua alma hoje?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="p-4 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
+                    <form onsubmit="app.handleChatSubmit(event)" class="relative flex gap-3 max-w-4xl mx-auto">
+                        <input type="text" id="chat-input"
+                            class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-purple-500 focus:bg-white/10 transition-all placeholder-white/30 text-lg shadow-inner"
+                            placeholder="Digite sua pergunta ou pensamento...">
+                        <button type="submit" id="chat-btn"
+                            class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50 disabled:cursor-not-allowed group">
+                            <i data-lucide="send"
+                                class="w-6 h-6 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                        </button>
+                    </form>
+                    <p class="text-center text-xs text-slate-500 mt-3 font-medium">A IA pode cometer erros. Confie na
+                        sua intuição acima de tudo.</p>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button onclick="app.setStep('intro')"
+                    class="text-sm font-bold text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-2 mx-auto">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Saved Modal -->
+    <div id="saved-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-fade-in">
+        <div
+            class="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col max-h-[80vh]">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3 font-mystic">
+                    <i data-lucide="book-open" class="w-6 h-6 text-purple-400"></i>
+                    <span id="saved-title">Grimório de Mapas</span>
+                </h2>
+                <button onclick="app.toggleSavedModal(false)"
+                    class="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="saved-list" class="p-6 overflow-y-auto space-y-3">
+                <!-- List injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="delete-confirm-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+        <div
+            class="w-full max-w-sm glass-panel rounded-3xl p-6 shadow-2xl border border-red-500/20 transform scale-100 transition-all">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2 font-mystic">Desfazer Realidade?</h3>
+                <p class="text-slate-300 text-sm mb-6">Tem certeza que deseja apagar este mapa do grimório? Esta ação é
+                    irreversível, como a quebra de uma Joia do Infinito.</p>
+                <div class="flex gap-3 w-full">
+                    <button onclick="app.cancelDelete()"
+                        class="flex-1 py-3 rounded-xl border border-white/10 text-white font-bold hover:bg-white/5 transition-colors">
+                        Cancelar
+                    </button>
+                    <button onclick="app.confirmDelete()"
+                        class="flex-1 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 shadow-lg shadow-red-900/20 transition-colors">
+                        Apagar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal (NOVO) -->
+    <div id="settings-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-fade-in">
+        <div class="w-full max-w-md glass-panel rounded-3xl p-6 shadow-2xl border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white font-mystic flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-slate-400"></i> Configurações
+                </h3>
+                <button onclick="app.toggleSettingsModal(false)" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label
+                        class="block text-sm font-bold text-purple-200 uppercase tracking-wide mb-2 flex items-center gap-2">
+                        <i data-lucide="key" class="w-4 h-4"></i> Chave da API Gemini (IA)
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="inp-api-key"
+                            class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 pr-10 text-white focus:outline-none focus:border-purple-500 focus:bg-black/50 transition-all placeholder-white/20 font-mono text-sm"
+                            placeholder="Cole sua chave aqui...">
+                        <button onclick="app.togglePasswordVisibility()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1">
+                            <i data-lucide="eye" id="icon-eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    A chave é salva apenas no seu navegador. Obtenha a sua gratuitamente no <a
+                        href="https://aistudio.google.com/app/apikey" target="_blank"
+                        class="text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-2">Google
+                        AI Studio</a>.
+                </p>
+                <button onclick="app.saveSettings()"
+                    class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-purple-900/20 mt-4 flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-4 h-4"></i> Salvar Configuração
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-8 text-center text-slate-500 text-sm border-t border-white/5 bg-slate-950 mt-auto">
+        <p class="font-bold">AstroLab © 2026 • Feito por Kauan Bryan</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        const apiKey = ""; // API Key will be injected by the environment
+
+        const ZODIAC_SIGNS = [
+            { id: 'aries', icon: '♈', element: 'fire', name: "Áries" },
+            { id: 'taurus', icon: '♉', element: 'earth', name: "Touro" },
+            { id: 'gemini', icon: '♊', element: 'air', name: "Gêmeos" },
+            { id: 'cancer', icon: '♋', element: 'water', name: "Câncer" },
+            { id: 'leo', icon: '♌', element: 'fire', name: "Leão" },
+            { id: 'virgo', icon: '♍', element: 'earth', name: "Virgem" },
+            { id: 'libra', icon: '♎', element: 'air', name: "Libra" },
+            { id: 'scorpio', icon: '♏', element: 'water', name: "Escorpião" },
+            { id: 'sagittarius', icon: '♐', element: 'fire', name: "Sagitário" },
+            { id: 'capricorn', icon: '♑', element: 'earth', name: "Capricórnio" },
+            { id: 'aquarius', icon: '♒', element: 'air', name: "Aquário" },
+            { id: 'pisces', icon: '♓', element: 'water', name: "Peixes" }
+        ];
+
+        // TEXTOS ATUALIZADOS E APROFUNDADOS
+        const ARCANA_MEANINGS = {
+            1: { name: "O Mago", archetype: "O Iniciador", desc: "Você possui o arquétipo do Mago, o mestre da manifestação. Assim como um alquimista transforma chumbo em ouro, você tem a habilidade inata de converter ideias abstratas em realidade tangível. Sua mente é afiada, rápida e incrivelmente engenhosa. O universo lhe deu todas as ferramentas necessárias na mesa da vida; o segredo para você é o foco da vontade. Quando você decide que algo vai acontecer, você move céus e terra para realizar.", icon: 'wand-2', color: "from-purple-500 to-indigo-600" },
+            2: { name: "A Sacerdotisa", archetype: "A Guardiã", desc: "Sua alma ressoa com A Sacerdotisa, a guardiã dos mistérios ocultos. Você possui uma intuição que beira o sobrenatural e uma conexão profunda com o subconsciente. Diferente dos que gritam para serem ouvidos, você encontra poder no silêncio e na observação. Você entende o que não é dito e vê além dos véus da realidade. Seu caminho é o da sabedoria interior; confiar nos seus instintos nunca falha.", icon: 'scroll', color: "from-blue-500 to-cyan-600" },
+            3: { name: "A Imperatriz", archetype: "A Criadora", desc: "A Imperatriz é a força da natureza que flui através de você. Este arquétipo fala de criatividade desenfreada, abundância e a capacidade de nutrir projetos e pessoas. Você tem um magnetismo pessoal que atrai prosperidade e beleza. Para você, a vida deve ser vivida com todos os sentidos. Você é o solo fértil onde qualquer semente plantada com amor florescerá em algo magnífico.", icon: 'crown', color: "from-emerald-400 to-green-600" },
+            4: { name: "O Imperador", archetype: "O Construtor", desc: "Como O Imperador, você é o pilar de estrutura em um mundo caótico. Você possui uma autoridade natural e uma visão estratégica que lhe permite construir impérios, sejam eles carreiras, famílias ou legados. A disciplina não é um fardo para você, mas a ferramenta da sua liberdade. Você protege o que é seu e estabelece a ordem onde há desordem. Seu poder reside na estabilidade e na lógica inabalável.", icon: 'shield', color: "from-red-600 to-orange-700" },
+            5: { name: "O Papa", archetype: "O Mestre", desc: "O arquétipo do Papa (ou Hierofante) indica que você é um buscador e transmissor de sabedoria profunda. Você valoriza a tradição não por rigidez, mas como uma fundação para o conhecimento espiritual e moral. As pessoas procuram você em busca de conselhos, pois sentem que você possui as chaves para entender as regras do jogo da vida. Você é a ponte entre o divino e o humano, o professor eterno.", icon: 'book-open', color: "from-amber-500 to-yellow-600" },
+            6: { name: "Os Enamorados", archetype: "O Harmonizador", desc: "Os Enamorados representam o poder da escolha e da união. Sua jornada é definida pelos caminhos que você escolhe seguir com o coração. Você busca a harmonia perfeita entre opostos e floresce através das conexões verdadeiras com os outros. Para você, o amor não é apenas romance, é um estado de ser e uma filosofia de vida. Seu desafio e sua força residem em integrar a razão e a paixão em uma única voz.", icon: 'heart', color: "from-pink-500 to-rose-600" },
+            7: { name: "O Carro", archetype: "O Guerreiro", desc: "Você encarna a energia imparável d'O Carro. Quando você define um objetivo, nada pode ficar no seu caminho. Sua vida é movida pela força de vontade e pela determinação de vencer. Você sabe como controlar as rédeas de forças opostas e direcioná-las para o sucesso. A vitória não é uma sorte para você, é uma conquista merecida através do foco e da disciplina. Avance sem medo.", icon: 'arrow-right', color: "from-orange-500 to-red-500" },
+            8: { name: "A Força", archetype: "O Domador", desc: "Sua verdadeira força não é física, mas espiritual. O arquétipo da Força revela uma alma corajosa que domina seus instintos mais selvagens com compaixão e paciência, não com violência. Você tem o poder de acalmar tempestades, tanto internas quanto externas. Sua resiliência é lendária; você enfrenta desafios com um coração aberto e uma confiança tranquila que desbrava qualquer medo.", icon: 'sun', color: "from-yellow-500 to-orange-400" },
+            9: { name: "O Eremita", archetype: "O Sábio", desc: "O Eremita caminha sozinho para encontrar a luz que guiará os outros. Você possui uma alma introspectiva e filosófica, buscando respostas que o mundo exterior não pode oferecer. O isolamento não é solidão para você, mas um santuário de recarga e descoberta. Você carrega a lanterna da verdade, iluminando seu próprio caminho e servindo de farol para aqueles que estão perdidos na escuridão.", icon: 'star', color: "from-slate-500 to-indigo-800" },
+            10: { name: "A Roda da Fortuna", archetype: "O Destino", desc: "Você entende intuitivamente os ciclos da vida. A Roda da Fortuna indica que você sabe fluir com as mudanças, adaptando-se às voltas do destino. Você tem sorte porque está sempre em movimento, pronto para agarrar as oportunidades quando elas surgem no topo da roda. Sua sabedoria reside em saber que nada é permanente, e isso lhe dá a liberdade de aproveitar o momento presente intensamente.", icon: 'refresh-cw', color: "from-violet-500 to-fuchsia-600" },
+            11: { name: "A Justiça", archetype: "O Juiz", desc: "A verdade é sua espada e o equilíbrio é sua balança. O arquétipo da Justiça revela uma mente analítica e imparcial, que busca a retidão em todas as coisas. Você vive pela lei de causa e efeito; entende que cada ação tem uma consequência. Sua integridade é inegociável. Você é o mediador natural, aquele que consegue ver os dois lados de uma questão e encontrar a solução justa e correta.", icon: 'scale', color: "from-zinc-400 to-slate-600" },
+            12: { name: "O Pendurado", archetype: "O Visionário", desc: "Onde os outros veem um impasse, você vê uma nova perspectiva. O Pendurado é o arquétipo do sacrifício voluntário em prol de uma sabedoria maior. Você tem a capacidade rara de pausar, refletir e ver o mundo de cabeça para baixo para entendê-lo de verdade. Sua iluminação vem quando você solta o controle e confia no fluxo do universo. Você é um místico em potencial.", icon: 'anchor', color: "from-teal-500 to-cyan-700" },
+            13: { name: "A Morte", archetype: "O Transformador", desc: "Não tema o nome; este é o arcano da metamorfose suprema. Você é a fênix que renasce das cinzas. Sua vida é marcada por ciclos de fins profundos e novos começos radiantes. Você tem a coragem de eliminar o que não serve mais — hábitos, relações, crenças — para abrir espaço para o novo. Você é o agente de mudança, aquele que entende que para viver plenamente, é preciso deixar o passado morrer.", icon: 'skull', color: "from-stone-700 to-black" },
+            14: { name: "A Temperança", archetype: "O Alquimista", desc: "Você é o mestre do equilíbrio e da cura. A Temperança fala da habilidade de misturar opostos para criar algo novo e perfeito. Você tem uma paciência angelical e uma diplomacia que cura feridas. Sua vida flui melhor quando você segue o caminho do meio, evitando extremos. Você é o alquimista da alma, capaz de transformar conflito em paz e ansiedade em propósito sereno.", icon: 'flower', color: "from-blue-400 to-indigo-400" },
+            15: { name: "O Diabo", archetype: "O Magnetismo", desc: "Este arcano revela um poder pessoal intenso e um magnetismo quase hipnótico. Você tem uma conexão profunda com o mundo material e os desejos terrenos. O desafio aqui é a liberdade: reconhecer as correntes que você mesmo criou. Você tem a ambição e a paixão para conquistar o mundo, mas sua verdadeira vitória acontece quando você usa esse fogo interior sem se tornar escravo dele. Ria das suas sombras e elas perderão o poder.", icon: 'zap', color: "from-red-900 to-slate-900" },
+            16: { name: "A Torre", archetype: "O Libertador", desc: "Você é a tempestade que limpa o terreno para a verdadeira construção. A Torre representa revelações súbitas e a quebra de estruturas falsas. Embora possa parecer caótico, sua energia é de libertação. Você não suporta viver em ilusões; prefere a verdade dura que liberta do que a mentira confortável. Você é resiliente e, após cada queda, reconstrói sua vida sobre bases de verdade inabalável.", icon: 'lock', color: "from-orange-600 to-stone-700" },
+            17: { name: "A Estrela", archetype: "A Esperança", desc: "Você é a luz no fim do túnel para si mesmo e para os outros. A Estrela é o arcano da fé pura, da inspiração e da renovação espiritual. Você possui um otimismo que não é ingênuo, mas visionário. Sua presença acalma e inspira. Você está conectado com o fluxo cósmico de bênçãos; seu propósito é brilhar sua autenticidade e lembrar ao mundo que, após a tempestade, sempre vem a calmaria e a clareza.", icon: 'sparkles', color: "from-sky-400 to-blue-300" },
+            18: { name: "A Lua", archetype: "O Místico", desc: "Você navega pelas águas profundas do subconsciente, dos sonhos e da intuição. A Lua indica uma alma poética, sensível e psíquica. O mundo visível é apenas metade da história para você; você vê as correntes invisíveis que movem a realidade. Cuidado com ilusões e medos infundados, mas confie na sua bússola interna. Você tem o dom de trazer à tona o que está oculto e transformá-lo em arte ou cura.", icon: 'cloud-moon', color: "from-indigo-800 to-purple-900" },
+            19: { name: "O Sol", archetype: "A Alegria", desc: "Sua essência é pura vitalidade, sucesso e clareza. O Sol é o melhor presságio do baralho, e tê-lo como arcano pessoal significa que sua natureza é brilhar. Você atrai felicidade e irradia calor humano. As sombras não sobrevivem na sua presença. Você nasceu para se expressar, para celebrar a vida e para alcançar a grandeza através da simplicidade de ser quem você é. A alegria é seu direito de nascença.", icon: 'sun', color: "from-yellow-400 to-amber-500" },
+            20: { name: "O Julgamento", archetype: "O Despertar", desc: "Você está aqui para ouvir um chamado superior. O Julgamento fala de despertar espiritual e de deixar para trás uma versão antiga de si mesmo para ascender a um novo nível de consciência. Você sente que tem uma missão maior e vive momentos de clareza absoluta que mudam o curso da sua vida. Você tem o dom de perdoar o passado e renascer totalmente transformado. A trombeta toca para você.", icon: 'eye', color: "from-cyan-600 to-blue-700" },
+            21: { name: "O Mundo", archetype: "A Realização", desc: "Você é a completude. O Mundo representa o sucesso total, a integração de todas as partes do seu ser e a realização de grandes ciclos. Você tem uma visão global e se sente conectado com o todo. Sua jornada é sobre alcançar o topo da montanha e dançar com o universo. Você não deixa pontas soltas; você conclui o que começa com maestria. O mundo é, literalmente, o seu palco.", icon: 'globe', color: "from-green-500 to-emerald-700" },
+            22: { name: "O Louco", archetype: "O Viajante Livre", desc: "Você é o espírito livre original, o início de tudo. O Louco (ou o Bobo) representa o potencial infinito, a inocência e a coragem de dar um salto de fé no desconhecido. Você não segue mapas; você segue seu coração. O medo do fracasso não o paralisa, pois você vê a vida como uma grande aventura experimental. Sua espontaneidade é sua magia. Onde os outros veem um abismo, você vê a chance de voar.", icon: 'user', color: "from-lime-400 to-green-500" }
+        };
+
+        const SIGN_DATA = {
+            aries: {
+                name: "Áries",
+                traits: ["Iniciativa", "Coragem", "Impulsividade"],
+                details: {
+                    personality: "Áries é a centelha primordial do Zodíaco, uma força de natureza incontrolável que irrompe na existência com um grito de 'Eu Sou'. Indivíduos regidos por este signo possuem uma vitalidade bruta e uma honestidade cortante; para eles, a vida não é um ensaio, mas um campo de batalha a ser conquistado agora. Sua impaciência é lendária, não por falta de disciplina, mas por uma urgência de viver. Eles não guardam rancor porque estão ocupados demais avançando para o próximo desafio. A sua presença é sempre notada; eles trazem a luz, o calor e, por vezes, o incêndio. A liderança é natural para eles, não por desejo de poder, mas porque simplesmente não conseguem seguir passos lentos. São pioneiros destemidos.",
+                    love: "No terreno afetivo, Áries é o caçador arquetípico. O amor morno, previsível ou seguro demais é percebido como tédio mortal. Eles precisam da adrenalina da conquista, do jogo de sedução e de um parceiro que não se intimide com sua intensidade. Amam com uma paixão furiosa e direta, sem joguinhos mentais passivo-agressivos. Se houver problema, haverá confronto imediato, seguido de uma reconciliação igualmente intensa. Buscam alguém que tenha autonomia e brilho próprio para correr ao seu lado, alguém que desafie seu intelecto e sua força. A rotina é a inimiga da paixão ariana.",
+                    work: "O ambiente corporativo estagnado e burocrático é a criptonita do ariano. Eles nasceram para empreender, liderar crises e abrir novos caminhos onde antes só havia mato. São excelentes em dar o pontapé inicial em projetos ambiciosos, motivando equipes com seu entusiasmo contagiante. No entanto, podem ter dificuldade em finalizar tarefas detalhistas ou rotineiras. Seu talento brilha na autonomia, na competição saudável e na capacidade de tomar decisões rápidas sob pressão. Eles são os pioneiros que não temem o risco e transformam obstáculos em trampolins."
+                }
+            },
+            taurus: {
+                name: "Touro",
+                traits: ["Estabilidade", "Sensorialidade", "Determinação"],
+                details: {
+                    personality: "Touro é a manifestação física da estabilidade, a âncora que impede o mundo de flutuar no caos. Regidos por Vênus, taurinos possuem uma conexão profunda e visceral com o mundo material e os cinco sentidos. Eles não apenas vivem; eles degustam a existência. Sua paciência é geológica, movendo-se num ritmo deliberado que ignora a pressa alheia. O que muitos chamam de teimosia é, na verdade, uma persistência inabalável e uma fidelidade aos seus valores. Eles buscam construir algo que dure para sempre, seja uma casa, uma carreira ou uma relação. A segurança não é um desejo, é uma necessidade vital para sua paz de espírito.",
+                    love: "O amor para Touro não é um flerte passageiro; é um investimento de vida. Eles demoram a se entregar, testando a solidez do terreno, mas quando o fazem, a lealdade é absoluta e protetora. A linguagem do amor taurino é física: o toque constante, o abraço seguro, o presente pensado, o jantar preparado com esmero. Podem ser possessivos, pois veem o parceiro como algo precioso que lhes pertence. Buscam uma vida a dois sem dramas desnecessários, onde a rotina compartilhada se torna um ritual sagrado de intimidade e prazer sensorial. A fidelidade é inegociável.",
+                    work: "No trabalho, Touro é a força produtiva imparável. Eles não têm medo de trabalho duro, desde que a recompensa seja tangível e segura. Têm um talento natural para acumular e gerir recursos, brilhando em finanças, imobiliário, gastronomia ou artes. Aversos a riscos imprudentes, preferem o caminho seguro e constante rumo à prosperidade. São colegas confiáveis que garantem que o projeto não apenas comece, mas que seja finalizado com qualidade e excelência prática. Eles transformam esforço em impérios duradouros."
+                }
+            },
+            gemini: {
+                name: "Gêmeos",
+                traits: ["Curiosidade", "Versatilidade", "Comunicação"],
+                details: {
+                    personality: "Gêmeos é a mente universal, o eterno aprendiz que absorve o mundo em fragmentos de informação. Regidos por Mercúrio, sua agilidade mental é estonteante; eles conseguem processar múltiplas realidades simultaneamente. São camaleões sociais, capazes de conversar com qualquer pessoa sobre qualquer assunto. A sua famosa dualidade não é falsidade, mas sim a capacidade de ver todas as facetas de um prisma. O medo da estagnação e do tédio os impulsiona a uma busca constante por novidade. Para Gêmeos, a vida só é real quando pode ser comunicada, debatida e compartilhada. São a juventude eterna do zodíaco.",
+                    love: "O caminho para o coração de um geminiano é, inegavelmente, através do cérebro. Eles são sapiossexuais; excitam-se com a inteligência, o humor rápido e a troca de ideias. A rotina doméstica silenciosa pode sufocá-los. Precisam de um parceiro que seja múltiplo: amante, amigo, debatedor e companheiro de aventuras. O amor deve ser leve, lúdico e verbal. Podem ter dificuldade com emoções profundas e pesadas, preferindo racionalizar os sentimentos, mas são companhias fascinantes que mantêm a chama da curiosidade sempre acesa. A liberdade é essencial.",
+                    work: "Eles são os mensageiros e conectores do zodíaco. Profissões estáticas os matam por dentro. Brilham no jornalismo, vendas, marketing, tecnologia e ensino. Sua capacidade de multitarefa é natural; podem gerir vários projetos ao mesmo tempo sem perder o ritmo. São excelentes negociadores, usando a palavra como uma ferramenta mágica para abrir portas. No entanto, precisam cultivar a disciplina para aprofundar-se e não apenas navegar na superfície das coisas. São a ponte entre ideias e pessoas, mestres da adaptação."
+                }
+            },
+            cancer: {
+                name: "Câncer",
+                traits: ["Empatia", "Memória", "Proteção"],
+                details: {
+                    personality: "Câncer é o arquétipo da Grande Mãe, a fonte de toda nutrição e memória emocional. Regidos pela Lua, seus humores flutuam como as marés, conferindo-lhes uma profundidade psíquica inigualável. Embora possam apresentar uma carapaça dura ao mundo exterior como mecanismo de defesa, seu interior é macio e extremamente receptivo. Eles carregam o passado consigo, valorizando tradições, raízes e laços familiares acima de tudo. Sua intuição não é um palpite, é um radar emocional preciso que capta as intenções alheias antes que uma palavra seja dita. São os guardiões da alma.",
+                    love: "No amor, Câncer busca o absoluto: a fusão de almas e a construção de um santuário seguro. Eles amam com uma dedicação feroz e protetora, cuidando do parceiro com uma ternura maternal (ou paternal). A segurança emocional é sua prioridade número um. A traição ou a frieza ferem profundamente, e eles têm uma memória de elefante para mágoas, podendo guardar rancor por anos. Quando se sentem seguros, porém, são os parceiros mais carinhosos e leais do zodíaco, transformando uma casa em um verdadeiro lar cheio de afeto.",
+                    work: "Não subestime a ambição canceriana. Eles atacam seus objetivos de forma lateral e tenaz, como o caranguejo. Possuem um faro incrível para negócios e sabem instintivamente o que o público deseja. Prosperam em carreiras de cuidado (saúde, psicologia), hospitalidade, gastronomia e gestão de recursos humanos. No ambiente de trabalho, tendem a criar laços familiares com a equipe, liderando através da empatia e da proteção, mas podem levar críticas profissionais para o lado pessoal. Eles nutrem o sucesso com paciência."
+                }
+            },
+            leo: {
+                name: "Leão",
+                traits: ["Carisma", "Nobreza", "Criatividade"],
+                details: {
+                    personality: "Leão é a personificação do Sol: radiante, centralizador e doador de vida. Leoninos possuem uma realeza natural e uma necessidade intrínseca de autoexpressão. Eles não apenas entram numa sala; eles chegam. Seu otimismo, generosidade e calor humano são magnéticos, atraindo as pessoas para sua órbita. Embora possam ser acusados de egocentrismo, sua intenção raramente é maliciosa; eles genuinamente acreditam que, ao brilharem, iluminam o caminho para os outros. O orgulho é sua armadura e seu calcanhar de Aquiles, mas sua coragem é inquestionável e inspiradora.",
+                    love: "O amor para Leão é um espetáculo cinematográfico. Eles desprezam a mediocridade sentimental. São apaixonados, teatrais e incrivelmente generosos, cobrindo o amado de presentes e experiências luxuosas. Em troca, exigem adoração, lealdade absoluta e validação constante. Querem um parceiro que seja um 'troféu' ao seu lado, alguém que eles possam admirar e exibir com orgulho. A indiferença é a única coisa que um coração leonino não perdoa. Eles amam com o coração na boca e esperam o mesmo.",
+                    work: "Eles nasceram para o palco e para o trono. Se não estão liderando, estão criando algo que leva sua assinatura pessoal. Brilham nas artes, entretenimento, gestão executiva e política. Têm uma visão macro excelente e sabem delegar tarefas menores, inspirando a equipe com sua confiança inabalável. Precisam de autonomia e reconhecimento público; trabalhar nas sombras ou em funções puramente burocráticas apaga sua chama vital. São líderes que defendem seus times com ferocidade."
+                }
+            },
+            virgo: {
+                name: "Virgem",
+                traits: ["Análise", "Perfeccionismo", "Serviço"],
+                details: {
+                    personality: "Virgem é o alquimista da matéria, buscando purificar e aperfeiçoar tudo o que toca. Sua mente funciona como um scanner de alta precisão, detectando falhas, erros e oportunidades de melhoria que passam despercebidos pela maioria. São modestos, realistas e profundamente orientados para o serviço. O perfeccionismo virginiano não é uma neurose, mas uma forma de amor pelo mundo: eles querem que as coisas funcionem, que sejam úteis e que sirvam ao seu propósito. São os guardiões da ordem no caos da existência, sempre prontos para resolver o insolúvel com humildade.",
+                    love: "O amor de Virgem é sóbrio, prático e devotado. Eles não fazem grandes discursos shakespearianos; eles trocam o óleo do seu carro, organizam seus remédios e garantem que você esteja alimentado. Para eles, amar é cuidar. Podem ser críticos com o parceiro, mas é sempre com a intenção de ajudar a pessoa a evoluir. Buscam relacionamentos higiênicos, honestos e intelectualmente estimulantes. Demoram a baixar a guarda, analisando todos os riscos, mas uma vez comprometidos, são parceiros incrivelmente confiáveis e prestativos.",
+                    work: "São a espinha dorsal de qualquer organização eficiente. Excelentes médicos, editores, analistas de dados, nutricionistas e técnicos. Onde há um sistema complexo ou um problema lógico, Virgem encontra a solução. São trabalhadores incansáveis que não buscam necessariamente os holofotes, mas a satisfação do trabalho bem feito. Podem se perder nos detalhes e sofrer com ansiedade pelo excesso de autocrítica, precisando aprender a valorizar o 'feito' em vez do 'perfeito'. A eficiência é seu mantra sagrado."
+                }
+            },
+            libra: {
+                name: "Libra",
+                traits: ["Diplomacia", "Justiça", "Estética"],
+                details: {
+                    personality: "Libra é o esteta do zodíaco, o buscador incansável pelo equilíbrio perfeito entre opostos. Regidos por Vênus, têm uma aversão visceral ao conflito, à vulgaridade e à injustiça. Sua mente opera através da comparação e da síntese, o que gera sua famosa indecisão: eles veem a validade em todos os pontos de vista. São socialmente brilhantes, charmosos e diplomáticos, navegando em qualquer círculo com elegância. Sua identidade é frequentemente moldada no espelho do relacionamento com o outro; a harmonia é sua religião e a beleza sua prece.",
+                    love: "Para Libra, a vida solitária é uma anomalia. Eles respiram o conceito de parceria. São os românticos ideais, sempre atentos às necessidades e desejos do parceiro, buscando uma convivência harmoniosa e esteticamente bela. O flerte é sua segunda língua. O perigo reside na codependência e na tendência de anular suas próprias vontades apenas para manter uma paz superficial ('engolir sapos' para não brigar). Buscam uma relação que seja tanto uma união de almas quanto uma parceria social elegante e equilibrada.",
+                    work: "São os grandes mediadores e negociadores. Brilham no direito, diplomacia, relações públicas, moda, design e arquitetura. Têm um talento natural para ver o que é justo e belo. Trabalham melhor em parcerias ou equipes do que isoladamente. Têm dificuldade em ambientes agressivos, competitivos de forma suja ou esteticamente desagradáveis. Sua habilidade de networking e de 'vender' ideias com charme é sua maior ferramenta de sucesso. Eles trazem beleza e civilidade ao mundo corporativo."
+                }
+            },
+            scorpio: {
+                name: "Escorpião",
+                traits: ["Intensidade", "Estratégia", "Mistério"],
+                details: {
+                    personality: "Escorpião é o xamã do zodíaco, aquele que caminha entre os mundos da vida e da morte, do consciente e do inconsciente. É o signo mais intenso, magnético e incompreendido. Eles possuem um radar psíquico para mentiras e segredos; nada lhes escapa. Vivem em extremos emocionais e têm uma capacidade de regeneração assustadora: como a Fênix, eles renascem mais fortes após cada crise ou destruição. O controle é seu mecanismo de defesa contra sua própria vulnerabilidade abissal. Eles não temem a escuridão; eles a dominam e a transformam em luz.",
+                    love: "Amar um Escorpião é uma experiência transformadora. Eles não sabem amar pela metade. Buscam a fusão absoluta, o conhecimento dos segredos mais sombrios do outro, a intimidade que transcende o corpo. São possessivos, ciumentos e territoriais, pois o medo da traição é constante. A lealdade é sua lei suprema. Se traídos, podem ser vingativos, mas se amados com verdade, são os defensores mais ferozes e dedicados que alguém pode ter. O sexo é sagrado, profundo e espiritual para eles.",
+                    work: "São estrategistas natos e gestores de crises. Prosperam onde outros falham ou temem pisar. Excelentes cirurgiões, psicólogos, investigadores, detetives e investidores de risco. Têm sangue frio e uma visão de raio-x para problemas ocultos. Gostam de poder e influência, muitas vezes preferindo operar nos bastidores, controlando os fios sem serem vistos. Sua determinação obsessiva garante que, quando focam num objetivo, nada os detém até que seja alcançado."
+                }
+            },
+            sagittarius: {
+                name: "Sagitário",
+                traits: ["Liberdade", "Sabedoria", "Otimismo"],
+                details: {
+                    personality: "Sagitário é o filósofo nômada, sempre com a flecha apontada para um horizonte distante. Regidos por Júpiter, são movidos por uma fé inabalável na vida, um otimismo contagiante e uma sede insaciável de conhecimento e expansão. Para eles, a vida é uma grande aventura acadêmica e espiritual. Valorizam a verdade acima de tudo, o que os torna brutalmente honestos (e às vezes sem tato). A liberdade não é negociável; qualquer muro, físico ou mental, é visto como um desafio a ser derrubado. São os buscadores eternos do sentido da vida.",
+                    love: "No amor, buscam um cúmplice de aventuras, não um dono. Precisam de alguém que ria com eles, que tenha bagagem cultural e que não tente cortar suas asas. A rotina doméstica previsível é seu inferno pessoal. Podem ter medo de compromisso se sentirem que isso significa estagnação, mas são parceiros incrivelmente divertidos, generosos e estimulantes quando encontram alguém que corre no mesmo ritmo. O amor ideal é aquele que expande seus horizontes e ensina algo novo a cada dia.",
+                    work: "Precisam de carreiras que ofereçam movimento, significado e grandes ideias. Turismo, comércio exterior, direito, academia, teologia e publicações são seus campos. São visionários, capazes de ver o quadro geral e inspirar equipes com metas grandiosas, embora possam negligenciar os detalhes práticos da execução. Funcionam melhor com autonomia e flexibilidade. São os eternos professores e mentores, adorando compartilhar sua sabedoria e entusiasmo com o mundo."
+                }
+            },
+            capricorn: {
+                name: "Capricórnio",
+                traits: ["Ambição", "Disciplina", "Pragmatismo"],
+                details: {
+                    personality: "Capricórnio é o sábio ancião do zodíaco, nascido com uma compreensão inata do tempo, do dever e da responsabilidade. Regidos por Saturno, são pragmáticos, ambiciosos e incrivelmente resilientes. Encaram a vida como uma montanha a ser escalada: o caminho é duro, mas a vista do topo vale o esforço. Valorizam a tradição, a hierarquia e a competência. Podem parecer reservados ou melancólicos, mas possuem um humor seco e uma profundidade emocional que reservam apenas para os íntimos. A integridade é sua marca registrada.",
+                    love: "O amor é um assunto sério e estrutural. Não buscam flertes passageiros, mas parcerias sólidas que resistam ao tempo e agreguem valor (inclusive social) à sua vida. Demonstram afeto provendo, protegendo e planejando o futuro. Podem ter dificuldade em expressar vulnerabilidade verbalmente, mas sua lealdade é de ferro. Buscam alguém que respeite sua ambição e que compartilhe de seus objetivos de longo prazo. São o pilar de sustentação da família e parceiros para a vida toda.",
+                    work: "São os administradores do mundo. Nascidos para a liderança, a gestão e a estruturação de grandes empreendimentos. Têm uma ética de trabalho inigualável e uma paciência estratégica para alcançar o sucesso, degrau por degrau. Brilham em corporações, governo, engenharia e finanças. São respeitados pela sua integridade, pontualidade e capacidade de assumir responsabilidades pesadas sem reclamar. Para Capricórnio, o sucesso é a melhor vingança e o legado é o objetivo final."
+                }
+            },
+            aquarius: {
+                name: "Aquário",
+                traits: ["Inovação", "Fraternidade", "Originalidade"],
+                details: {
+                    personality: "Aquário é o alienígena do zodíaco, o visionário que enxerga o mundo 50 anos à frente. Regidos por Urano, são rebeldes, originais e profundamente humanitários. Valorizam a liberdade intelectual e o coletivo, muitas vezes em detrimento das relações pessoais íntimas. Detestam convenções sociais vazias e autoridades sem mérito. Sua mente é lógica, científica e intuitiva. Podem parecer frios ou distantes, mas é porque estão ocupados pensando em como salvar o mundo ou reinventar a sociedade. São únicos e inclassificáveis em sua essência.",
+                    love: "O amor aquariano começa na mente. Buscam, acima de tudo, uma amizade profunda e intelectual. O parceiro deve ser independente, interessante e não convencional. O ciúme, o drama e a possessividade são repelentes instantâneos. Precisam de muito espaço e autonomia dentro da relação. O amor é visto como uma escolha livre e racional de caminhar junto, não como uma necessidade emocional. São leais aos seus princípios e às pessoas que respeitam sua excentricidade e liberdade de ser.",
+                    work: "Inovação é a palavra-chave. Ciência, tecnologia, aviação, ativismo social, astrologia e TI são seus habitats. Trabalham melhor em estruturas horizontais, colaborativas e sem chefias autoritárias. São os que trazem as ideias 'fora da caixa' que resolvem problemas antigos. Detestam rotinas repetitivas e burocracia. Precisam sentir que seu trabalho contribui para a evolução da humanidade ou para a quebra de paradigmas obsoletos. São os rebeldes com causa e gênios incompreendidos."
+                }
+            },
+            pisces: {
+                name: "Peixes",
+                traits: ["Espiritualidade", "Compaixão", "Imaginação"],
+                details: {
+                    personality: "Peixes é o oceano da consciência coletiva, onde todas as fronteiras se dissolvem. Signo místico, sonhador e empático, os piscianos sentem a dor e a alegria do mundo como se fossem suas. Sua imaginação é vasta e, muitas vezes, mais real para eles do que a realidade concreta. São artísticos, adaptáveis e espirituais. Têm dificuldade em estabelecer limites e dizer 'não', o que os torna vulneráveis a energias negativas, mas também lhes confere uma compaixão santa. São os poetas da existência e as almas velhas.",
+                    love: "O amor é uma experiência de redenção e magia. São os românticos definitivos, buscando a fusão de almas, a telepatia e o conto de fadas. Tendem a idealizar o parceiro e a relação, o que pode levar a desilusões dolorosas quando a realidade bate à porta. Possuem uma capacidade infinita de perdoar e de se sacrificar pelo outro. Precisam de um parceiro que lhes dê âncora e realidade, mas que nunca tente matar seus sonhos ou sua magia. O amor pisciano cura e transcende.",
+                    work: "O mundo corporativo frio e predatório é tóxico para a alma pisciana. Precisam de trabalho com propósito, alma e criatividade. Brilham nas artes (música, cinema, dança), nas curas (enfermagem, terapia, esoterismo) e na caridade. Trabalham por inspiração e fluxos intuitivos, não por horários rígidos. Sua sensibilidade é seu maior ativo profissional, permitindo-lhes entender o indizível e conectar-se profundamente com o público ou pacientes. Eles trazem alma ao trabalho."
+                }
+            }
+        };
+
+        // --- APP LOGIC ---
+        const app = {
+            currentChart: null,
+            savedCharts: [],
+            isSaved: false,
+            activeTab: 'personality',
+            chatHistory: [],
+            chatMode: 'tarot',
+            pendingDeleteIndex: null,
+            apiKey: '',
+
+            init: () => {
+                const saved = localStorage.getItem('astroLabSaves');
+                if (saved) app.savedCharts = JSON.parse(saved);
+
+                // Carregar API Key salva ou usar a global
+                const storedKey = localStorage.getItem('astroLabApiKey');
+                if (storedKey) {
+                    app.apiKey = storedKey;
+                    document.getElementById('inp-api-key').value = storedKey;
+                } else if (typeof apiKey !== 'undefined' && apiKey !== "") {
+                    // Fallback para a chave injetada pelo ambiente (se existir)
+                    app.apiKey = apiKey;
+                }
+
+                app.renderSavedList();
+                lucide.createIcons();
+            },
+
+            setStep: (stepId) => {
+                ['step-intro', 'step-form', 'step-loading', 'step-result', 'step-tarot'].forEach(id => {
+                    document.getElementById(id).classList.add('hidden');
+                    document.getElementById(id).classList.remove('flex');
+                });
+                const el = document.getElementById(`step-${stepId}`);
+                el.classList.remove('hidden');
+
+                if (stepId === 'loading' || stepId === 'result') {
+                    el.classList.add('flex', 'flex-col');
+                }
+
+                if (stepId === 'tarot') {
+                    el.classList.add('flex', 'flex-col');
+                }
+
+                lucide.createIcons();
+            },
+
+            // --- SETTINGS LOGIC ---
+            toggleSettingsModal: (show) => {
+                const modal = document.getElementById('settings-modal');
+                if (show) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    // Preencher com a chave atual se existir
+                    if (app.apiKey) document.getElementById('inp-api-key').value = app.apiKey;
+                } else {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            },
+
+            saveSettings: () => {
+                const key = document.getElementById('inp-api-key').value.trim();
+                app.apiKey = key;
+                localStorage.setItem('astroLabApiKey', key);
+                app.toggleSettingsModal(false);
+                alert("Configuração salva com sucesso! Os portais místicos estão abertos.");
+            },
+
+            togglePasswordVisibility: () => {
+                const input = document.getElementById('inp-api-key');
+                const icon = document.getElementById('icon-eye');
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.setAttribute('data-lucide', 'eye-off');
+                } else {
+                    input.type = "password";
+                }
+            },
+
+            handleCalculate: (e) => {
+                e.preventDefault();
+                const date = document.getElementById('inp-date').value;
+
+                if (!date) {
+                    alert("Por favor, selecione uma data de nascimento válida.");
+                    return;
+                }
+
+                app.setStep('loading');
+
+                const name = document.getElementById('inp-name').value;
+                let time = document.getElementById('inp-time').value;
+                if (!time) time = "12:00";
+
+                const place = document.getElementById('inp-place').value;
+
+                setTimeout(() => {
+                    app.currentChart = app.calculateChart(date, time);
+                    app.currentChart.userData = { name, date, time, place };
+                    app.isSaved = false;
+                    app.chatHistory = [];
+                    app.renderResults();
+                    app.setStep('result');
+                }, 2000);
+            },
+
+            calculateChart: (dateString, timeString) => {
+                const getDaysSinceJ2000 = (dStr, tStr) => {
+                    if (!dStr) return 0;
+                    try {
+                        const d = new Date(`${dStr}T${tStr}:00Z`);
+                        if (isNaN(d.getTime())) return 0;
+                        return (d - new Date('2000-01-01T12:00:00Z')) / 86400000;
+                    } catch (e) {
+                        return 0;
+                    }
+                };
+                const normalize = (d) => { d = d % 360; return d < 0 ? d + 360 : d; };
+
+                const d = getDaysSinceJ2000(dateString, timeString);
+
+                const L_sun = normalize(280.461 + 0.9856474 * d);
+                const M_sun = normalize(357.528 + 0.9856003 * d);
+                const lambda_sun = normalize(L_sun + 1.915 * Math.sin(M_sun * Math.PI / 180) + 0.020 * Math.sin(2 * M_sun * Math.PI / 180));
+
+                const sunIndex = Math.floor(lambda_sun / 30) % 12;
+                const sunSign = ZODIAC_SIGNS[sunIndex >= 0 ? sunIndex : 0];
+
+                const L_moon = normalize(218.316 + 13.176396 * d);
+                const M_moon = normalize(134.963 + 13.064993 * d);
+                let lambda_moon = normalize(L_moon + 6.289 * Math.sin(M_moon * Math.PI / 180));
+
+                const moonIndex = Math.floor(lambda_moon / 30) % 12;
+                const moonSign = ZODIAC_SIGNS[moonIndex >= 0 ? moonIndex : 0];
+
+                const [h, m] = timeString.split(':').map(Number);
+                const decH = (h || 0) + (m || 0) / 60;
+                const ascDeg = normalize(lambda_sun + (decH - 6) * 15);
+
+                const risingIndex = Math.floor(ascDeg / 30) % 12;
+                const risingSign = ZODIAC_SIGNS[risingIndex >= 0 ? risingIndex : 0];
+
+                const parts = dateString.split('-');
+                const sumDigits = (n) => n.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+                let sum = sumDigits(parseInt(parts[0] || 0)) + sumDigits(parseInt(parts[1] || 0)) + sumDigits(parseInt(parts[2] || 0));
+                while (sum > 22) sum = sumDigits(sum);
+                if (sum === 0) sum = 22;
+
+                return { sun: sunSign, moon: moonSign, rising: risingSign, arcana: sum };
+            },
+
+            renderResults: () => {
+                const chart = app.currentChart;
+                const arcanaId = chart.arcana || 22;
+                const arcana = ARCANA_MEANINGS[arcanaId];
+
+                document.getElementById('res-name').innerText = chart.userData.name;
+                document.getElementById('res-details').innerHTML = `
+                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${chart.userData.place}</span>
+                    <span class="w-1 h-1 bg-purple-500 rounded-full"></span>
+                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${chart.userData.date}</span>
+                `;
+
+                document.getElementById('arcana-container').innerHTML = `
+                    <div class="w-full glass-panel p-8 rounded-[2rem] mb-10 shadow-2xl relative overflow-hidden group hover:border-purple-500/30 transition-all">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${arcana.color}"></div>
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="w-48 h-72 rounded-2xl bg-gradient-to-br ${arcana.color} shadow-lg shadow-purple-900/30 flex flex-col items-center justify-center text-white relative overflow-hidden transform group-hover:scale-105 transition-transform duration-500 border border-white/20">
+                                <div class="absolute inset-0 bg-black/10"></div>
+                                <div class="absolute top-3 right-4 text-4xl font-mystic opacity-40">${arcanaId}</div>
+                                <div class="relative z-10 mb-4 p-4 bg-white/20 rounded-full backdrop-blur-md border border-white/30">
+                                    <i data-lucide="${arcana.icon}" class="w-8 h-8"></i>
+                                </div>
+                                <h3 class="relative z-10 text-lg font-bold text-center px-4 font-mystic leading-tight tracking-wide">${arcana.name}</h3>
+                                <p class="relative z-10 text-[10px] uppercase tracking-widest mt-2 opacity-90 font-bold">${arcana.archetype}</p>
+                            </div>
+                            <div class="flex-1 text-center md:text-left">
+                                <div class="flex items-center justify-center md:justify-start gap-2 mb-3">
+                                    <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i>
+                                    <span class="text-sm text-purple-300 uppercase tracking-widest font-bold font-mystic">Arcano Pessoal</span>
+                                </div>
+                                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 font-mystic">${arcana.name}</h2>
+                                <p class="text-xl text-slate-200 leading-relaxed font-light font-sans text-justify md:text-left">"${arcana.desc}"</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const renderSign = (type, sign) => {
+                    if (!sign) return '';
+                    const sData = SIGN_DATA[sign.id];
+                    const titles = { sun: "Seu Sol", moon: "Sua Lua", rising: "Ascendente" };
+                    const descs = { sun: "Propósito vital e ego", moon: "Coração e emoções", rising: "Sua máscara social" };
+                    const icons = { sun: 'sun', moon: 'moon', rising: 'sparkles' };
+                    const colors = { fire: "from-orange-500 to-red-600", earth: "from-emerald-500 to-green-700", air: "from-sky-400 to-blue-600", water: "from-indigo-400 to-purple-600" };
+
+                    return `
+                        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${colors[sign.element]} p-8 text-white shadow-xl transform transition-all hover:-translate-y-2 hover:shadow-2xl">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-md border border-white/20"><i data-lucide="${icons[type]}" class="w-6 h-6"></i></div>
+                                <div class="text-6xl opacity-30 font-mystic">${sign.icon}</div>
+                            </div>
+                            <div class="mb-3">
+                                <h3 class="text-sm font-bold opacity-90 uppercase tracking-widest font-mystic">${titles[type]}</h3>
+                                <p class="text-xs opacity-80 font-medium">${descs[type]}</p>
+                            </div>
+                            <h2 class="text-4xl font-bold mb-6 font-mystic">${sData.name}</h2>
+                            <div class="flex flex-wrap gap-2">
+                                ${sData.traits.map(tr => `<span class="bg-black/20 px-3 py-1.5 rounded-lg text-xs font-bold backdrop-blur-sm border border-white/10 uppercase tracking-wide">${tr}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                };
+
+                document.getElementById('zodiac-grid').innerHTML =
+                    renderSign('sun', chart.sun) +
+                    renderSign('rising', chart.rising) +
+                    renderSign('moon', chart.moon);
+
+                document.getElementById('details-sign-name').innerText = SIGN_DATA[chart.sun.id].name;
+                app.renderTabs();
+                lucide.createIcons();
+            },
+
+            renderTabs: () => {
+                const chart = app.currentChart;
+                const details = SIGN_DATA[chart.sun.id].details;
+                const tabs = [
+                    { id: 'personality', label: "Sua Vibe", icon: 'user' },
+                    { id: 'love', label: "No Amor", icon: 'heart' },
+                    { id: 'work', label: "Seu Talento", icon: 'briefcase' }
+                ];
+
+                document.getElementById('tabs-container').innerHTML = tabs.map(tab => `
+                    <button onclick="app.switchTab('${tab.id}')" class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${app.activeTab === tab.id ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50' : 'text-slate-400 hover:bg-white/5 hover:text-white'}">
+                        <i data-lucide="${tab.icon}" class="w-4 h-4"></i> ${tab.label}
+                    </button>
+                `).join('');
+
+                document.getElementById('details-content').innerHTML = details[app.activeTab];
+                lucide.createIcons();
+            },
+
+            switchTab: (id) => {
+                app.activeTab = id;
+                app.renderTabs();
+            },
+
+            setChatMode: (mode) => {
+                app.chatMode = mode;
+                const tarotBtn = document.getElementById('mode-tarot-btn');
+                const chatBtn = document.getElementById('mode-chat-btn');
+                const tarotTable = document.getElementById('tarot-section');
+
+                if (mode === 'tarot') {
+                    tarotBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg');
+                    tarotBtn.classList.remove('text-slate-400', 'hover:text-white');
+                    chatBtn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg');
+                    chatBtn.classList.add('text-slate-400', 'hover:text-white');
+                    tarotTable.classList.remove('hidden');
+                } else {
+                    chatBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg');
+                    chatBtn.classList.remove('text-slate-400', 'hover:text-white');
+                    tarotBtn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg');
+                    tarotBtn.classList.add('text-slate-400', 'hover:text-white');
+                    tarotTable.classList.add('hidden');
+                }
+            },
+
+            handleChatSubmit: async (e) => {
+                e.preventDefault();
+
+                // Validação de API KEY
+                if (!app.apiKey) {
+                    const chat = document.getElementById('chat-messages');
+                    chat.innerHTML += `
+                        <div class="flex items-start gap-4 animate-fade-in">
+                            <div class="w-10 h-10 rounded-full bg-red-900/50 border border-red-500/30 flex items-center justify-center flex-shrink-0 text-red-200">
+                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            </div>
+                            <div class="bg-red-900/20 border border-red-500/20 rounded-2xl rounded-tl-none p-5 text-red-200 max-w-[85%] leading-relaxed shadow-sm">
+                                <p><strong>Falta Energia Mística!</strong></p>
+                                <p>Para conversar com o Oráculo, você precisa configurar sua chave da API. Clique no ícone de engrenagem no topo da página para ativar.</p>
+                            </div>
+                        </div>
+                    `;
+                    chat.scrollTop = chat.scrollHeight;
+                    lucide.createIcons();
+                    return;
+                }
+
+                const input = document.getElementById('chat-input');
+                const message = input.value;
+                if (!message) return;
+
+                const btn = document.getElementById('chat-btn');
+                btn.disabled = true;
+                input.value = '';
+
+                // Add User Message
+                const chat = document.getElementById('chat-messages');
+                chat.innerHTML += `
+                    <div class="flex items-start gap-4 justify-end animate-fade-in">
+                        <div class="bg-indigo-600/80 backdrop-blur-sm border border-indigo-500/30 rounded-2xl rounded-tr-none p-5 text-white max-w-[85%] shadow-lg leading-relaxed">
+                            <p>${message}</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                        </div>
+                    </div>
+                `;
+                chat.scrollTop = chat.scrollHeight;
+                lucide.createIcons();
+
+                app.chatHistory.push({ role: 'user', content: message });
+
+                let prompt = "";
+
+                const c = app.currentChart || {
+                    userData: { name: "Viajante" },
+                    sun: { name: "Misterioso" },
+                    moon: { name: "Misterioso" },
+                    rising: { name: "Misterioso" },
+                    arcana: 22
+                };
+
+                const arcanaData = ARCANA_MEANINGS[c.arcana] || ARCANA_MEANINGS[22];
+
+                if (app.chatMode === 'tarot') {
+                    const drawn = [];
+                    while (drawn.length < 3) {
+                        const r = Math.floor(Math.random() * 22) + 1;
+                        if (!drawn.includes(r)) drawn.push(r);
+                    }
+
+                    const table = document.getElementById('tarot-table');
+                    table.innerHTML = '';
+                    drawn.forEach((id, idx) => {
+                        const cardData = ARCANA_MEANINGS[id];
+                        setTimeout(() => {
+                            const cardHtml = `
+                                <div class="tarot-card-scene animate-fade-in-up">
+                                    <div class="tarot-card-inner">
+                                        <div class="tarot-card-back"></div>
+                                        <div class="tarot-card-front bg-gradient-to-br ${cardData.color}">
+                                            <div class="flex flex-col items-center justify-center h-full p-2 text-white">
+                                                <div class="absolute top-2 right-2 text-xs opacity-50 font-mystic">${id}</div>
+                                                <div class="bg-white/20 p-2 rounded-full mb-2 backdrop-blur-md"><i data-lucide="${cardData.icon}" class="w-6 h-6"></i></div>
+                                                <div class="text-xs font-bold text-center font-mystic leading-tight">${cardData.name}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            const div = document.createElement('div');
+                            div.innerHTML = cardHtml;
+                            table.appendChild(div.firstElementChild);
+                            lucide.createIcons();
+                            setTimeout(() => { table.children[idx].querySelector('.tarot-card-inner').classList.add('flipped'); }, 500);
+                        }, idx * 800);
+                    });
+
+                    prompt = `You are Madame Astra, a mystic tarot reader. User (Name: ${c.userData.name}, Sun: ${c.sun.name}) asked: "${message}". You drew these cards: 1. ${ARCANA_MEANINGS[drawn[0]].name} (Past/Context), 2. ${ARCANA_MEANINGS[drawn[1]].name} (Present/Action), 3. ${ARCANA_MEANINGS[drawn[2]].name} (Future/Outcome). Interpret this spread for the user. Language: Português (Brasil). Tone: Mystical, empathetic, wise.`;
+
+                    await new Promise(r => setTimeout(r, 2500));
+
+                } else {
+                    prompt = `You are Madame Astra, a wise spiritual mentor and astrologer. 
+                    User Profile: Name: ${c.userData.name}, Sun: ${c.sun.name}, Moon: ${c.moon.name}, Rising: ${c.rising.name}, Arcana: ${arcanaData.name}.
+                    
+                    Conversation History:
+                    ${app.chatHistory.map(m => `${m.role}: ${m.content}`).join('\n')}
+                    
+                    Respond to the last message. Be helpful, remember their astrological data, use a warm and slightly mystical tone. Language: Português (Brasil).`;
+                }
+
+                try {
+                    const typingDiv = document.createElement('div');
+                    typingDiv.id = 'ai-typing';
+                    typingDiv.className = 'flex items-start gap-4 animate-fade-in';
+                    typingDiv.innerHTML = `
+                        <div class="w-10 h-10 rounded-full bg-purple-900/50 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-purple-300"></i>
+                        </div>
+                        <div class="bg-white/5 border border-white/5 rounded-2xl rounded-tl-none p-5 text-slate-200 max-w-[85%] flex gap-2">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></span>
+                            <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></span>
+                            <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-200"></span>
+                        </div>
+                    `;
+                    chat.appendChild(typingDiv);
+                    chat.scrollTop = chat.scrollHeight;
+                    lucide.createIcons();
+
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${app.apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+
+                    const text = data.candidates[0].content.parts[0].text;
+
+                    document.getElementById('ai-typing').remove();
+
+                    chat.innerHTML += `
+                        <div class="flex items-start gap-4 animate-fade-in">
+                            <div class="w-10 h-10 rounded-full bg-purple-900/50 border border-purple-500/30 flex items-center justify-center flex-shrink-0 text-purple-200">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            </div>
+                            <div class="bg-white/5 border border-white/5 rounded-2xl rounded-tl-none p-5 text-slate-200 max-w-[85%] leading-relaxed shadow-sm prose prose-invert prose-p:my-2 prose-strong:text-purple-300">
+                                ${marked.parse(text)}
+                            </div>
+                        </div>
+                    `;
+                    app.chatHistory.push({ role: 'model', content: text });
+                    chat.scrollTop = chat.scrollHeight;
+                    lucide.createIcons();
+
+                } catch (error) {
+                    console.error(error);
+                    if (document.getElementById('ai-typing')) document.getElementById('ai-typing').remove();
+
+                    let errorMsg = `Os astros silenciaram... (Erro: ${error.message})`;
+                    if (error.message.includes("API key not valid")) {
+                        errorMsg = `<strong>Chave Inválida!</strong> A chave da API inserida não é válida. Verifique se há espaços ou caracteres incorretos nas configurações.`;
+                    }
+
+                    chat.innerHTML += `<div class="text-center text-red-300 bg-red-900/30 p-3 rounded-xl text-sm mt-2 border border-red-500/20">${errorMsg}</div>`;
+                } finally {
+                    btn.disabled = false;
+                }
+            },
+
+            askAI: async (mode) => {
+                // Validação de API KEY
+                if (!app.apiKey) {
+                    app.toggleSettingsModal(true);
+                    alert("Por favor, configure sua chave da API Gemini nas configurações para usar este recurso místico.");
+                    return;
+                }
+
+                const container = document.getElementById('ai-output-container');
+                const loading = document.getElementById('ai-loading');
+                const content = document.getElementById('ai-content');
+
+                container.classList.remove('hidden');
+                loading.classList.remove('hidden');
+                content.innerHTML = '';
+
+                const c = app.currentChart;
+
+                let prompt = "";
+                if (mode === 'synergy') {
+                    prompt = `You are a mystical astrologer. Provide a deep synthesis of this chart: Sun in ${c.sun.name}, Moon in ${c.moon.name}, Rising in ${c.rising.name}. Explain how these specific 3 energies interact (conflicts or harmonies). Name: ${c.userData.name}. Language: Português (Brasil). Tone: Inspiring and deep. Max 2 paragraphs.`;
+                } else if (mode === 'advice') {
+                    const arcanaName = ARCANA_MEANINGS[c.arcana].name;
+                    prompt = `You are a tarot oracle. The user's Personal Arcana is ${c.arcana} (${arcanaName}). Give a specific spiritual advice for their current life path based on this card and their Sun in ${c.sun.name}. Name: ${c.userData.name}. Language: Português (Brasil). Tone: Wise and direct. Max 1 paragraph.`;
+                }
+
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${app.apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) throw new Error(data.error.message);
+
+                    const text = data.candidates[0].content.parts[0].text;
+
+                    loading.classList.add('hidden');
+                    content.innerHTML = marked.parse(text);
+                } catch (error) {
+                    console.error(error);
+                    loading.classList.add('hidden');
+                    let errorMsg = `Os astros estão nublados... (Erro: ${error.message})`;
+                    if (error.message.includes("API key not valid")) {
+                        errorMsg = `<strong>Chave Inválida!</strong> Verifique a API Key nas configurações (ícone de engrenagem).`;
+                    }
+                    content.innerHTML = `<p class="text-red-400 bg-red-900/20 p-2 rounded-lg text-sm">${errorMsg}</p>`;
+                }
+            },
+
+            handleSave: () => {
+                if (app.isSaved) return;
+                const newSave = { ...app.currentChart.userData, chart: app.currentChart, timestamp: new Date().toISOString() };
+                app.savedCharts.unshift(newSave);
+                localStorage.setItem('astroLabSaves', JSON.stringify(app.savedCharts));
+                app.isSaved = true;
+                app.renderSavedList();
+                document.getElementById('btn-save-text').innerText = "Salvo!";
+            },
+
+            toggleSavedModal: (show) => {
+                const modal = document.getElementById('saved-modal');
+                show ? (modal.classList.remove('hidden'), modal.classList.add('flex')) : (modal.classList.add('hidden'), modal.classList.remove('flex'));
+            },
+
+            renderSavedList: () => {
+                const list = document.getElementById('saved-list');
+                if (app.savedCharts.length === 0) {
+                    list.innerHTML = `<div class="text-center py-10 text-slate-500"><i data-lucide="save" class="w-12 h-12 mx-auto mb-3 opacity-20"></i><p>Você ainda não salvou nenhum mapa.</p></div>`;
+                } else {
+                    list.innerHTML = app.savedCharts.map((save, idx) => `
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-purple-500/50 transition-all group cursor-pointer" onclick="app.loadSave(${idx})">
+                            <div><h3 class="font-bold text-white text-lg font-mystic">${save.name}</h3><div class="flex gap-3 mt-1 text-sm"><span class="text-amber-200">☀ ${save.chart.sun.name}</span></div></div>
+                            <button onclick="event.stopPropagation(); app.initDelete(${idx})" class="p-3 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        </div>
+                    `).join('');
+                }
+                lucide.createIcons();
+            },
+
+            loadSave: (idx) => {
+                const save = app.savedCharts[idx];
+                app.currentChart = save.chart;
+                app.currentChart.userData = { name: save.name, date: save.date, time: save.time, place: save.place };
+                app.toggleSavedModal(false);
+                app.renderResults();
+                app.setStep('result');
+                app.isSaved = true;
+                document.getElementById('btn-save-text').innerText = "Salvo!";
+            },
+
+            initDelete: (idx) => {
+                app.pendingDeleteIndex = idx;
+                const modal = document.getElementById('delete-confirm-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            },
+
+            cancelDelete: () => {
+                app.pendingDeleteIndex = null;
+                const modal = document.getElementById('delete-confirm-modal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            },
+
+            confirmDelete: () => {
+                if (app.pendingDeleteIndex !== null) {
+                    app.savedCharts.splice(app.pendingDeleteIndex, 1);
+                    localStorage.setItem('astroLabSaves', JSON.stringify(app.savedCharts));
+                    app.renderSavedList();
+                }
+                app.cancelDelete();
+            }
+        };
+
+        window.onload = app.init;
+
+        const bg = document.getElementById('star-bg');
+        for (let i = 0; i < 60; i++) {
+            const d = document.createElement('div');
+            d.className = 'star opacity-70 animate-pulse';
+            d.style.top = Math.random() * 100 + '%';
+            d.style.left = Math.random() * 100 + '%';
+            d.style.width = Math.random() * 2 + 1 + 'px';
+            d.style.height = d.style.width;
+            d.style.animationDuration = Math.random() * 3 + 2 + 's';
+            bg.appendChild(d);
+        }
+    </script>
+</body>
+
+</html>
