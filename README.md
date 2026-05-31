@@ -1,53 +1,26 @@
-# 🔭 AstroLab
+# 🔮 AstroLab
 
-**AstroLab** é uma aplicação web interativa sobre astronomia e exploração espacial — um laboratório virtual para aprender, explorar e se maravilhar com o universo.
+**AstroLab** é uma aplicação web interativa sobre astrologia, criada para explorar signos, planetas, casas astrológicas e os principais conceitos da interpretação astrológica.
 
 ## 📋 Sobre o Projeto
 
-O **AstroLab** é um projeto web temático voltado para a astronomia. A aplicação apresenta informações sobre planetas, estrelas, galáxias e fenômenos do universo de forma visual e interativa, funcionando como um laboratório de ciência espacial acessível a qualquer pessoa.
+O **AstroLab** é um projeto web temático voltado para a astrologia. A plataforma reúne informações sobre os signos do zodíaco, influências planetárias, elementos astrológicos e curiosidades do universo esotérico de forma visual e acessível.
 
 ## 🖥️ Tecnologias Utilizadas
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-
-- **HTML5** — estrutura da aplicação
-- **CSS3** — visual espacial e animações
-- **JavaScript** — interatividade e dados dinâmicos
-
-## 📁 Estrutura do Projeto
-
-```
-AstroLab/
-├── index.html      # Aplicação principal
-└── favicon.png     # Ícone da aplicação
-```
+- HTML5 — estrutura da aplicação
+- CSS3 — design visual e animações
+- JavaScript — interatividade e conteúdo dinâmico
 
 ## ✨ Funcionalidades
 
-- Exploração interativa de corpos celestes
-- Informações sobre planetas do sistema solar e além
-- Visual imersivo com tema espacial
-- Interface educativa e acessível
+- Informações detalhadas sobre os signos do zodíaco
+- Exploração de planetas e suas influências astrológicas
+- Interface temática e imersiva
+- Conteúdo educativo e intuitivo
+- Navegação dinâmica entre elementos astrológicos
 
 ## 🚀 Como Executar
 
 ```bash
-# Clone o repositório
 git clone https://github.com/bryanwinchezz/AstroLab.git
-
-# Abra no navegador
-open index.html
-```
-
-## 👨‍💻 Autor
-
-**bryanwinchezz (Kauan Bryan)**
-
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/bryanwinchezz)
-[![LinkedIn](https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge)](https://www.linkedin.com/in/kauan-bryan-silveira-silva-416102350)
-
----
-
-> O universo é vasto — o AstroLab é sua janela para ele.
