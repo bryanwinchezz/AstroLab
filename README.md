@@ -24,3 +24,14 @@ O **AstroLab** é um projeto web temático voltado para a astrologia. A platafor
 
 ```bash
 git clone https://github.com/bryanwinchezz/AstroLab.git
+```
+
+Abra o arquivo `index.html` em seu navegador.
+
+## 👨‍💻 Autor
+
+**bryanwinchezz (Kauan Bryan)**
+
+---
+
+> "As estrelas inclinam, mas não determinam."
